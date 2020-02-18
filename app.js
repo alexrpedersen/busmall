@@ -14,25 +14,25 @@ function busMallProduct(name, imagePath) {
 
 //Hard Coded BusMall Products to be cycled through
 
-new busMallProduct('R2D2 Bag', 'img/bag.jpg');
-new busMallProduct('Shark Blanket', 'img/shark.jpg');
-new busMallProduct('Banana Slicer', 'img/banana.jpg');
-new busMallProduct('iPad Toilet Paper Holder', 'img/bathroom.jpg');
-new busMallProduct('Rain Boots', 'img/boots.jpg');
-new busMallProduct('Breakfast Machine', 'img/breakfast.jpg');
-new busMallProduct('MeatBall Gum', 'img/bubblegum.jpg');
-new busMallProduct('Chair', 'img/chair.jpg');
-new busMallProduct('Cthulhu', 'img/cthulhu.jpg');
-new busMallProduct('Dog Duck', 'img/dog-duck.jpg');
-new busMallProduct('Dragon', 'img/dragon.jpg');
-new busMallProduct('Pen', 'img/pen.jpg');
-new busMallProduct('Scissors', 'img/scissors.jpg');
-new busMallProduct('Sweep', 'img/sweep.png');
-new busMallProduct('TaunTaun', 'img/tauntaun.jpg');
-new busMallProduct('Unicorn', 'img/unicorn.jpg');
-new busMallProduct('USB', 'img/usb.gif');
-new busMallProduct('Water Can', 'img/water-can.jpg');
-new busMallProduct('Wine Glass', 'img/wine-glass.jpg');
+var bag = new busMallProduct('R2D2 Bag', 'img/bag.jpg');
+var shark = new busMallProduct('Shark Blanket', 'img/shark.jpg');
+var banana = new busMallProduct('Banana Slicer', 'img/banana.jpg');
+var toilet = new busMallProduct('iPad Toilet Paper Holder', 'img/bathroom.jpg');
+var boots = new busMallProduct('Rain Boots', 'img/boots.jpg');
+var breakfast = new busMallProduct('Breakfast Machine', 'img/breakfast.jpg');
+var gum = new busMallProduct('MeatBall Gum', 'img/bubblegum.jpg');
+var chair = new busMallProduct('Chair', 'img/chair.jpg');
+var cthulhu = new busMallProduct('Cthulhu', 'img/cthulhu.jpg');
+var duck = new busMallProduct('Dog Duck', 'img/dog-duck.jpg');
+var dragon = new busMallProduct('Dragon', 'img/dragon.jpg');
+var pen = new busMallProduct('Pen', 'img/pen.jpg');
+var scissors = new busMallProduct('Scissors', 'img/scissors.jpg');
+var sweep = new busMallProduct('Sweep', 'img/sweep.png');
+var tauntaun = new busMallProduct('TaunTaun', 'img/tauntaun.jpg');
+var unicorn = new busMallProduct('Unicorn', 'img/unicorn.jpg');
+var usb = new busMallProduct('USB', 'img/usb.gif');
+var watercan = new busMallProduct('Water Can', 'img/water-can.jpg');
+var wineglass = new busMallProduct('Wine Glass', 'img/wine-glass.jpg');
 
 function randomProductToDisplay()
 {
@@ -77,6 +77,6 @@ function productsToChooseFrom(productName, productPath){
  new productsToChooseFrom();
  new productsToChooseFrom();
 
-console.log(randomProductToDisplay);
+console.log(listProductsToDisplay);
 
 
