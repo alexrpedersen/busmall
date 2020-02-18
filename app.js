@@ -4,12 +4,11 @@ var numberOfRandomItems = 3
 var maxlistProductsToDisplay, maxNumSelections;
 var allProductList=[];  
 var listProductsToDisplay=[]; 
+var allBusMallProduct=[];
 
 function busMallProduct(name, imagePath) {
   this.name = name;
   this.image = imagePath;
-  this.timesClicked = 0;
-  this.timesRendered = 0;
   allBusMallProduct.push(this);
 }
 
@@ -41,7 +40,7 @@ function randomProductToDisplay()
   return(Math.floor(Math.random() * busMallProduct.length));
 }
 
-function generatelistProductsToDisplay()
+function listProductsToDisplay()
 {
   var randomIndex;
   var duplicated;
@@ -63,16 +62,21 @@ function generatelistProductsToDisplay()
       listProductsToDisplay.push(randomIndex); 
       allProductList[randomIndex].timesRendered++; 
     }
-  } 
+  }return(randomIndex); 
 }
 
-function Product(productName, productPath){
+function productsToChooseFrom(productName, productPath){
   this.productName = productName;
   this.productPath = productPath;
   this.timesClicked = 0; 
   this.timesRendered = 0; 
   allProductList.push(this); 
-
 }
+
+ new productsToChooseFrom();
+ new productsToChooseFrom();
+ new productsToChooseFrom();
+
+console.log(randomProductToDisplay);
 
 
