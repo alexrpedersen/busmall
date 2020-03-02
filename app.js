@@ -1,180 +1,208 @@
 'use strict';
 
-var resDisplay = true;
-var totalClicks = 0;
-var reverse = 0;
-var imgArr = [];
-var imgCache = imgArr.slice(0);
-var id = [];
-var clicks = [];
-var shown = [];
+var ctx = document.getElementById('voteChart').getContext('2d');
+var totalVotes = 0;
+var listOfProducts = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
+var listOfProductObjects = [];
+var container = document.getElementById('image-container')
+//create event listener when clicking on images
+container.addEventListener('click', onClick);
 
-var imgContainer = document.getElementById('container');
-imgContainer.addEventListener('click', handleImageClick);
+function Product(name, path) {
+  this.name = name; //name of product/image
+  this.path = path; //relative path to jpg
+  this.votes = 0; //clicks for this product
+  this.views = 0; //number of times image has been shown
+  listOfProductObjects.push(this);
+};
 
-function busMallProduct(id, src, shown, clicked) {
-    this.name = name;
-    this.src = src;
-    this.id = id;
-    this.shown = shown;
-    this.clicked = clicked;
-    imgArr.push(this);
-}
-
-function randomImgs(numImgs) {
-    var images = [];
-    var random;
-    for (var i = 0; i < numImgs; i++) {
-
-        if (imgCache.length <= 12) {
-            if (reverse === 2) {
-                imgCache = imgArr.slice(0).reverse();
-            } else {
-                imgCache = imgArr.slice(0);
-                reverse++;
-            }
-        }
-        if (imgCache.length > 12) {
-            var index = Math.floor(Math.random() * imgCache.length);
-            random = imgCache[index];
-            images.push(imgCache[index]);
-            imgCache.splice(index, 1);
-        };
-        for (var j = 0; j < imgArr.length - 1; j++) {
-            if (random.id === imgArr[j].id) {
-                imgArr[j].shown++;
-                break;
-            }
-        };
+(function() {
+  for (var i = 0; i < listOfProducts.length; i++) {
+    new Product(listOfProducts[i], './assets/' + listOfProducts[i] + '.jpg');
+  }
+  if (typeof(localStorage.getItem('stringifiedProducts')) === 'string') {
+    var stringifiedProducts = localStorage.getItem('stringifiedProducts');
+    var parsedProducts = JSON.parse(stringifiedProducts);
+    for (var i = 0; i < parsedProducts.length; i++) {
+      listOfProductObjects[i].votes = parsedProducts[i].votes;
+      listOfProductObjects[i].views = parsedProducts[i].views;
     };
-    return images;
-}
+  }
+  // voteChart.update();
+})();
 
-function render(images) {
-    var imageContainer = document.getElementById('container');
-    for (var i = 0; i < images.length; i++) {
-        var li = document.createElement('li');
-        li.innerHTML = '<img src="' + images[i].src + '" ' + 'id="' + images[i].id + '">';
-        imageContainer.appendChild(li);
+var first = document.getElementById('first');
+var img0 = document.createElement('img');
+first.appendChild(img0);
+
+var second = document.getElementById('second');
+var img1 = document.createElement('img');
+second.appendChild(img1);
+
+var third = document.getElementById('third');
+var img2 = document.createElement('img');
+third.appendChild(img2);
+
+function populate() {
+
+  var rand = [];
+  while (rand.length < 3) {
+    var randNum = (Math.ceil(Math.random() * listOfProducts.length)) - 1;
+    if (rand.indexOf(randNum) === -1) {
+      rand.push(randNum);
     }
+    continue;
+  }
+  // console.log(rand)
+
+  img0.src = listOfProductObjects[rand[0]].path;
+  img0.id = listOfProductObjects[rand[0]].name;
+  listOfProductObjects[rand[0]].views++;
+
+  img1.src = listOfProductObjects[rand[1]].path
+  img1.id = listOfProductObjects[rand[1]].name;
+  listOfProductObjects[rand[1]].views++;
+
+  img2.src = listOfProductObjects[rand[2]].path
+  img2.id = listOfProductObjects[rand[2]].name;
+  listOfProductObjects[rand[2]].views++;
 }
 
-function results() {
-    var resultContainer = document.getElementById('results');
-    for (var i = 0; i < imgArr.length; i++) {
-        var li = document.createElement('li');
-        li.innerHTML = 'Product ' + imgArr[i].id + ' was clicked ' + imgArr[i].clicked + ' times and shown ' + imgArr[i].shown + ' times.';
-        resultContainer.appendChild(li);
-    }
-}
+var clicks = 0;
+var buttonSection = document.getElementById('button');
 
-function handleImageClick(event) {
-    event.preventDefault;
-    var imgClicked = event.target.id;
-    if (imgClicked === 'container') {
-        alert('That isnt an image. Please try again.');
-    } else if (imgClicked && totalClicks < 24) {
-        for (var i = 0; i < imgArr.length; i++) {
-            if (imgClicked === imgArr[i].id) {
-                imgArr[i].clicked++;
-            }
-        }
-        totalClicks++;
-        imgContainer.innerHTML = '';
-        render(randomImgs(3));
-    } else if (resDisplay === true) {
-        createChart();
-        resDisplay = false;
-    }
-}
-
-function loadImages() {
-    new busMallProduct('bag', 'img/bag.jpg', 0, 0);
-    new busMallProduct('banana', 'img/banana.jpg', 0, 0);
-    new busMallProduct('bathroom', 'img/bathroom.jpg', 0, 0);
-    new busMallProduct('boots', 'img/boots.jpg', 0, 0);
-    new busMallProduct('breakfast', 'img/breakfast.jpg', 0, 0);
-    new busMallProduct('bubblegum', 'img/bubblegum.jpg', 0, 0);
-    new busMallProduct('chair', 'img/chair.jpg', 0, 0);
-    new busMallProduct('cthulhu', 'img/cthulhu.jpg', 0, 0);
-    new busMallProduct('dog-duck', 'img/dog-duck.jpg', 0, 0);
-    new busMallProduct('dragon', 'img/dragon.jpg', 0, 0);
-    new busMallProduct('pen', 'img/pen.jpg', 0, 0);
-    new busMallProduct('pet-sweep', 'img/pet-sweep.jpg', 0, 0);
-    new busMallProduct('scissors', 'img/scissors.jpg', 0, 0);
-    new busMallProduct('shark', 'img/shark.jpg', 0, 0);
-    new busMallProduct('sweep', 'img/sweep.png', 0, 0);
-    new busMallProduct('tauntaun', 'img/tauntaun.jpg', 0, 0);
-    new busMallProduct('unicorn', 'img/unicorn.jpg', 0, 0);
-    new busMallProduct('usb', 'img/usb.gif', 0, 0);
-    new busMallProduct('water-can', 'img/water-can.jpg', 0, 0);
-    new busMallProduct('wine-glass', 'img/wine-glass.jpg', 0, 0);
-}
-
-function populateChartArr() {
-    for (var i = 0; i < imgArr.length; i++) {
-        id.push(imgArr[i].id);
-        clicks.push(imgArr[i].clicked);
-        shown.push(imgArr[i].shown);
-        console.log('id', id);
-        console.log('clicks', clicks);
-        console.log('shown', shown);
-    }
-}
-
-function createChart() {
-  populateChartArr();
-  Chart.defaults.global.defaultFontColor = '#FFF';
-  var context = document.getElementById('results_chart').getContext('2d');
-  var chart = new Chart(context, dataObj);
-}
-
-function storageSupport() {
-  try {
-      return 'localStorage' in window && window['localStorage'] !== null;
-  } catch (e) {
-      return false;
+function checkForClicks() {
+  if (clicks === 15) {
+    console.log(clicks);
+    var button = document.createElement('button');
+    button.id = 'show-results';
+    button.textContent = 'Show Results'
+    buttonSection.appendChild(button);
+    //create event listener for clicking show-results button
+    button.addEventListener('click', renderResults);
+    container.removeEventListener('click', onClick);
   }
 }
 
-if (storageSupport()) {
-  var idFLS = localStorage.getItem(id);
-  var clicksFLS = localStorage.getItem(clicks);
-  var shownFLS = localStorage.getItem(shown);
-  var imgsFLS = localStorage.getItem('imgs');
-  
-  var idJSON = JSON.parse(idFLS);
-  var clicksJSON = JSON.parse(clicksFLS);
-  var shownJSON = JSON.parse(shownFLS);
-  var imgsJSON = JSON.parse(imgsFLS);
-  console.log(idJSON);
-} else {
+function onClick(click) {
 
- 
-  var imgsLS = JSON.stringify(imgArr);
-  localStorage.setItem('imgs', imgsLS);
-  var imgsFLS = localStorage.getItem('imgs');
-  var imgsJSON = JSON.parse(imgsFLS);
+  clicks+=1;
+  console.log('clicks: ' + clicks)
+  var productIndex = listOfProducts.indexOf(click.target.id);
+  listOfProductObjects[productIndex].votes +=1;  //***use something similar to this for views up above
+  // console.log('onClick', 'name: ' + click.target.id, ', productIndex: ' + productIndex, ', votes: ' + listOfProductObjects[productIndex].votes);
+  var images = document.getElementsByTagName('img');
+  if (clicks < 16) {
+    populate();
+  }
+  checkForClicks()
 }
 
-loadImages();
-render(randomImgs(3));
+function renderResults() {
+  var aside = document.getElementById('aside-left');
+  var results = document.getElementById('results');
+  results.remove();
+  var results = document.createElement('div');
+  results.id = 'results';
+  aside.appendChild(results);
+  var resultsH2 = document.createElement('h2');
+  resultsH2.textContent = 'Results:'
+  results.appendChild(resultsH2);
 
-var idLS = JSON.stringify(id);
-var clicksLS = JSON.stringify(clicks);
-var shownLS = JSON.stringify(shown);
+  var ulEl = document.createElement('ul');
+  results.appendChild(ulEl);
 
-localStorage.setItem('id', idLS);
-localStorage.setItem('clicks', clicksLS);
-localStorage.setItem('shown', shownLS);
+  for(var j = 0; j < listOfProductObjects.length; j++) {
+    voteChart.data.datasets[0].data.pop();
+  };
 
-var idFLS = localStorage.getItem(id);
-var clicksFLS = localStorage.getItem(clicks);
-var shownFLS = localStorage.getItem(shown);
+  for(var i in listOfProductObjects) {
+    var liEl = document.createElement('li');
+    liEl.textContent = listOfProductObjects[i].name + ': ' + listOfProductObjects[i].votes;
+    voteChart.data.datasets[0].data.push(listOfProductObjects[i].votes);
+    voteChart.update();
+    ulEl.appendChild(liEl);
+  };
+  storeData();
+};
 
-var idJSON = JSON.parse(idFLS);
-var clicksJSON = JSON.parse(clicksFLS);
-var shownJSON = JSON.parse(shownFLS);
+//display three random images
+populate();
 
+var voteChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: listOfProducts, // loads array of list of products for which the product constructor above also relies
+    datasets: [{
+      label: '# of Votes',
+      data: [], // Blank until updated by renderResults function above
+      // data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], // Zeroed dataset for testing purposes
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)'
+      ],
+      borderWidth: 1
+    }]
+  },
+  options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
 
+//push data to local storage
+function storeData() {
+ var stringifiedProducts = JSON.stringify(listOfProductObjects);
+ localStorage.setItem('stringifiedProducts', stringifiedProducts);
+ console.log(storeData);
+};
 
+for(var i in listOfProductObjects) {
+  voteChart.data.datasets[0].data.push(listOfProductObjects[i].votes);
+  voteChart.update();
+};
